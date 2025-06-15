@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{any::Any, fmt};
 
 use crate::internal::*;
 
@@ -35,7 +35,7 @@ impl From<Path> for IncludeTarget {
   }
 }
 
-pub trait IncludeResolver {
+pub trait IncludeResolver: Any {
   fn resolve(
     &mut self,
     target: IncludeTarget,
