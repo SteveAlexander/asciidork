@@ -15,7 +15,10 @@ impl<'arena> Parser<'arena> {
       self.restore_lines(lines);
       return Ok(Some(comment_block));
     }
-
+    // Temporary fix for https://github.com/jaredh159/asciidork/issues/103
+    if lines.current_token().is_none() {
+      return Ok(None);
+    }
     let meta = self.parse_chunk_meta(&mut lines)?;
     if lines.is_empty() {
       self.err_line_starting("Unattached block metadata", meta.start_loc)?;
