@@ -21,17 +21,17 @@ impl ParseResult<'_> {
     self.lexer.source_file_at(idx)
   }
 
-  pub fn take_include_resolver<T: 'static>(&mut self) -> Option<T> {
+  pub fn take_include_resolver_as<T: 'static>(&mut self) -> Option<T> {
     let resolver = self.include_resolver.take()?;
-    let resolver = resolver as Box<dyn std::any::Any>;
-    Some(*resolver.downcast::<T>().unwrap())
+    let any_resolver = resolver as Box<dyn std::any::Any>;
+    Some(*any_resolver.downcast::<T>().unwrap())
   }
 
   #[cfg(feature = "attr_ref_observation")]
-  pub fn take_attr_ref_observer<T: 'static>(&mut self) -> Option<T> {
+  pub fn take_attr_ref_observer_as<T: 'static>(&mut self) -> Option<T> {
     let observer = self.attr_ref_observer.take()?;
-    let observer = observer as Box<dyn std::any::Any>;
-    Some(*observer.downcast::<T>().unwrap())
+    let any_observer = observer as Box<dyn std::any::Any>;
+    Some(*any_observer.downcast::<T>().unwrap())
   }
 }
 

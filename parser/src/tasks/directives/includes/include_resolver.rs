@@ -45,7 +45,6 @@ pub trait IncludeResolver: Any {
   fn get_base_dir(&self) -> Option<String> {
     None
   }
-
   fn clone_box(&self) -> Box<dyn IncludeResolver>;
 }
 
