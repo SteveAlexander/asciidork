@@ -143,11 +143,7 @@ impl<'arena> Parser<'arena> {
   pub(crate) fn read_lines(&mut self) -> Result<Option<ContiguousLines<'arena>>> {
     self.ctx.comment_delim_in_lines = false;
     if let Some(peeked) = self.peeked_lines.take() {
-      if peeked.iter().all(|line| line.is_empty()) {
-        return Ok(None);
-      } else {
-        return Ok(Some(peeked));
-      }
+      return Ok(Some(peeked));
     }
     self.lexer.consume_empty_lines();
     if self.lexer.is_eof() {
@@ -240,7 +236,6 @@ impl<'arena> Parser<'arena> {
   }
 
   pub fn parse(mut self) -> std::result::Result<ParseResult<'arena>, Vec<Diagnostic>> {
-    let doc_attrs = self.document.meta.doc_attrs_snapshot();
     self.parse_document_header()?;
     self.prepare_toc();
 
@@ -262,7 +257,7 @@ impl<'arena> Parser<'arena> {
     }
 
     // so the backend can see them replayed in decl order
-    self.document.meta.restore_doc_attrs(doc_attrs);
+    self.document.meta.clear_doc_attrs();
     self.diagnose_document()?;
     Ok(self.into())
   }
